@@ -39,7 +39,7 @@ extension Renderer: MTKViewDelegate{
         
         let renderCommandEncoder = commandBuffer?.makeRenderCommandEncoder(descriptor: renderPassDescriptor)
         renderCommandEncoder?.label = "First Render Command Encoder"
-        
+        renderCommandEncoder?.setCullMode(.front)
         renderCommandEncoder?.pushDebugGroup("Starting Render")
         SceneManager.TickScene(renderCommandEncoder: renderCommandEncoder!, deltaTime: 1 / Float(view.preferredFramesPerSecond))
         renderCommandEncoder?.popDebugGroup()

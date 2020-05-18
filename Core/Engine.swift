@@ -17,12 +17,8 @@ class Engine{
         self.Device = device
         self.CommandQueue = device.makeCommandQueue()
         self.DefaultLibrary = device.makeDefaultLibrary()
-        
         Graphics.Initialize()
-        
         Entities.Initialize()
-        
-        SceneManager.Initialize(Preferences.startingSceneType)
-        
+        SceneManager.Initialize(Preferences.StartingSceneType)
     }
 }

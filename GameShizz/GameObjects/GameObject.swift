@@ -9,24 +9,20 @@
 import MetalKit
 
 class GameObject: Node {
+    private var _modelConstants = ModelConstants()
+    private var _mesh: Mesh!
+
+    private var _material: Material? = nil
+    private var _baseColorTextureType: TextureTypes = TextureTypes.None
     
-    var modelConstants = ModelConstants()
-    private var material = Material()
-    private var _textureType: TextureTypes = TextureTypes.None
-    
-    var mesh: Mesh!
-    
-    init(meshType: MeshTypes) {
-        mesh = Entities.Meshes[meshType]
+    init(name: String, meshType: MeshTypes) {
+        super.init(name: name)
+        _mesh = Entities.Meshes[meshType]
     }
     
     override func update(){
-        updateModelConstants()
+        _modelConstants.modelMatrix = self.modelMatrix
         super.update()
-    }
-    
-    private func updateModelConstants(){
-        modelConstants.modelMatrix = self.modelMatrix
     }
     
 }
@@ -36,29 +32,20 @@ extension GameObject: Renderable{
         renderCommandEncoder.setRenderPipelineState(Graphics.RenderPipelineStates[.Basic])
         renderCommandEncoder.setDepthStencilState(Graphics.DepthStencilStates[.Less])
         //Vertex Shader
-        renderCommandEncoder.setVertexBytes(&modelConstants, length: ModelConstants.stride, index: 2)
+        renderCommandEncoder.setVertexBytes(&_modelConstants, length: ModelConstants.stride, index: 2)
         
         //Fragment Shader
-        renderCommandEncoder.setFragmentSamplerState(Graphics.SamplerStates[.Linear], index: 0)
-        renderCommandEncoder.setFragmentBytes(&material, length: Material.stride, index: 1)
-        if(material.useTexture){
-            renderCommandEncoder.setFragmentTexture(Entities.Textures[_textureType], index: 0)
-        }
-        mesh.drawPrimitives(renderCommandEncoder)
+        _mesh.drawPrimitives(renderCommandEncoder, baseColorTextureType: _baseColorTextureType, material: _material)
     }
 }
 
 //Material Properties
 extension GameObject {
-    public func setColor(_ color: float4){
-        self.material.color = color
-        self.material.useMaterialColor = true
-        self.material.useTexture = false
+    public func useBaseColorTexture(_ textureType: TextureTypes){
+        self._baseColorTextureType = textureType
     }
-    public func setTexture(_ textureType: TextureTypes){
-        self._textureType = textureType
-        self.material.useTexture = true
-        self.material.useMaterialColor = false
+    public func useMaterial(_ material: Material){
+        _material = material
     }
 }
 

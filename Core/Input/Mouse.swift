@@ -9,9 +9,9 @@
 import MetalKit
 
 enum MOUSE_BUTTON_CODES: Int {
-    case LEFT = 0
-    case RIGHT = 1
-    case CENTER = 2
+    case left = 0
+    case right = 1
+    case center = 2
 }
 
 class Mouse {
@@ -41,7 +41,7 @@ class Mouse {
     ///Sets the delta distance the mouse had moved
     public static func SetMousePositionChange(overallPosition: float2, deltaPosition: float2){
         self.overallMousePosition = overallPosition
-        self.mousePositionDelta += deltaPosition
+        self.mousePositionDelta = deltaPosition
     }
     
     public static func ScrollMouse(deltaY: Float){
@@ -58,7 +58,7 @@ class Mouse {
     public static func GetDWheel()->Float{
         let position = scrollWheelChange
         scrollWheelChange = 0
-        return position
+        return -position
     }
     
     ///Movement on the y axis since last time getDY() was called.

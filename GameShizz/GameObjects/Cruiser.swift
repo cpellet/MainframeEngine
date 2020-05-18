@@ -10,8 +10,7 @@ import MetalKit
 
 class Cruiser: GameObject{
     init(){
-        super.init(meshType: .Cruiser)
-        setName("cruiser")
-        setTexture(.Cruiser)
+        super.init(name: "Cruiser", meshType: .Cruiser)
+        useBaseColorTexture(.Cruiser)
     }
 }

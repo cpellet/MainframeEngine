@@ -8,6 +8,10 @@
 
 import simd
 
+public typealias float2 = SIMD2<Float>
+public typealias float3 = SIMD3<Float>
+public typealias float4 = SIMD4<Float>
+
 protocol sizeable {}
 extension sizeable{
     static var size: Int{
@@ -24,6 +28,8 @@ extension sizeable{
     }
 }
 
+extension UInt32: sizeable{}
+extension Int32: sizeable{}
 extension Float: sizeable{}
 extension float2: sizeable{}
 extension float3: sizeable{}
@@ -33,6 +39,7 @@ struct Vertex: sizeable{
     var position: float3
     var color: float4
     var textureCoordinate: float2
+    var normal: float3
 }
 
 struct ModelConstants: sizeable{
@@ -43,10 +50,23 @@ struct SceneConstants: sizeable{
     var totalGameTime: Float = 0;
     var viewMatrix = matrix_identity_float4x4
     var projectionMatrix = matrix_identity_float4x4
+    var cameraPosition = float3(0,0,0)
 }
 
 struct Material: sizeable{
-    var color = float4(0.8, 0.8, 0.8, 1.0)
-    var useMaterialColor: Bool = false
-    var useTexture: Bool = false
+    var color = float4(0.4, 0.4, 0.4, 1.0)
+    var isLit: Bool = true
+    var ambient: float3 = float3(0.1, 0.1, 0.1)
+    var diffuse: float3 = float3(1,1,1)
+    var specular: float3 = float3(1,1,1)
+    var shininess: Float = 2
+}
+
+struct LightData: sizeable{
+    var position: float3 = float3(0,0,0)
+    var color: float3 = float3(1, 1, 1)
+    var brightness: Float = 1.0
+    var ambientIntensity: Float = 1.0
+    var diffuseIntensity: Float = 1.0
+    var specularIntensity: Float = 1.0
 }
